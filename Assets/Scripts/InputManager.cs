@@ -13,9 +13,9 @@ public class InputManager : MonoBehaviour
             return;
         }
 
-        if (Input.touchCount > 0)
+        if (TryGetActiveTouch(out var touchPosition))
         {
-            HandlePosition(Input.GetTouch(0).position);
+            HandlePosition(touchPosition);
             return;
         }
 
@@ -28,9 +28,25 @@ public class InputManager : MonoBehaviour
         ringController.SetRotationDirection(0);
     }
 
+    private static bool TryGetActiveTouch(out Vector2 position)
+    {
+        for (var i = 0; i < Input.touchCount; i++)
+        {
+            var touch = Input.GetTouch(i);
+            if (touch.phase is TouchPhase.Began or TouchPhase.Moved or TouchPhase.Stationary)
+            {
+                position = touch.position;
+                return true;
+            }
+        }
+
+        position = default;
+        return false;
+    }
+
     private void HandlePosition(Vector2 position)
     {
-        var direction = position.x < Screen.width * 0.5f ? 1 : -1;
-        ringController.SetRotationDirection(direction);
+        var rotationDirection = position.x < Screen.width * 0.5f ? 1 : -1;
+        ringController.SetRotationDirection(rotationDirection);
     }
 }

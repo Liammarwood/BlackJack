@@ -29,10 +29,23 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (Input.GetMouseButtonDown(0) || Input.touchCount > 0)
+        if (Input.GetMouseButtonDown(0) || HasTouchBegan())
         {
             StartGame();
         }
+    }
+
+    private static bool HasTouchBegan()
+    {
+        for (var i = 0; i < Input.touchCount; i++)
+        {
+            if (Input.GetTouch(i).phase == TouchPhase.Began)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void StartGame()

@@ -49,8 +49,7 @@ public class PulseSpawner : MonoBehaviour
             SpawnPulse();
         }
 
-        var difficulty = gameManager.SurvivalTime * difficultyRamp;
-        spawnTimer = Mathf.Max(minSpawnInterval, initialSpawnInterval - difficulty);
+        spawnTimer = Mathf.Max(minSpawnInterval, initialSpawnInterval - CurrentDifficulty);
     }
 
     public void BeginSpawning()
@@ -74,8 +73,7 @@ public class PulseSpawner : MonoBehaviour
 
         var angle = Random.Range(0f, 360f);
         var color = ringController.GetSegmentColorAtAngle(angle);
-        var difficulty = gameManager.SurvivalTime * difficultyRamp;
-        var speed = Mathf.Min(maxPulseSpeed, initialPulseSpeed + difficulty);
+        var speed = Mathf.Min(maxPulseSpeed, initialPulseSpeed + CurrentDifficulty);
 
         var pulse = pool.Dequeue();
         activePulses.Add(pulse);
@@ -106,4 +104,6 @@ public class PulseSpawner : MonoBehaviour
             activePulses.RemoveAt(i);
         }
     }
+
+    private float CurrentDifficulty => gameManager.SurvivalTime * difficultyRamp;
 }

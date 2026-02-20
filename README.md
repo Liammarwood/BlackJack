@@ -1,6 +1,6 @@
 # Black_Jack
 
-This repository now includes a Unity MVP script set for the **Resonance** endless arcade game under `/home/runner/work/BlackJack/BlackJack/Assets/Scripts`:
+This repository now includes a Unity MVP script set for the **Resonance** endless arcade game under `Assets/Scripts`:
 
 - `GameManager`
 - `RingController`

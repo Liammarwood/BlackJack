@@ -14,7 +14,7 @@ public class UIManager : MonoBehaviour
     {
         startPanel.SetActive(true);
         gameOverPanel.SetActive(false);
-        highScoreText.text = $"High Score {highScore}";
+        highScoreText.text = $"High Score: {highScore}";
         scoreText.text = "0";
         comboText.text = "x1";
     }
@@ -30,7 +30,7 @@ public class UIManager : MonoBehaviour
     public void ShowGameOver(int score, int highScore)
     {
         gameOverPanel.SetActive(true);
-        finalScoreText.text = $"Score {score}";
-        highScoreText.text = $"High Score {highScore}";
+        finalScoreText.text = $"Score: {score}";
+        highScoreText.text = $"High Score: {highScore}";
     }
 }

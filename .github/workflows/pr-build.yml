@@ -1,0 +1,61 @@
+name: PR Build and Test
+
+on:
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Cache Unity Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-Android-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-Android-
+            Library-
+
+      - name: Run EditMode Tests
+        uses: game-ci/unity-test-runner@v4
+        with:
+          testMode: EditMode
+          artifactsPath: test-results
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: EditMode Test Results
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-pr-${{ github.event.pull_request.number }}
+          path: test-results/
+
+      - name: Build Android APK
+        uses: game-ci/unity-builder@v4
+        with:
+          targetPlatform: Android
+          androidExportType: androidPackage
+          buildName: Resonance
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Resonance-PR-${{ github.event.pull_request.number }}.apk
+          path: build/Android/**/*.apk
